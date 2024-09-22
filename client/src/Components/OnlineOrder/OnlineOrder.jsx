@@ -29,19 +29,27 @@ const OnlineOrder = () => {
                         clickable: true,
                     }}
                     modules={[Pagination]}
-                    className="mySwiper"
+                    className="mySwiper "
                 >
                     <SwiperSlide>
-                        <img src={slide1} />
+                        <img src={slide1} className=""/>
+                        <h4 className="uppercase text-center -m-8 font-semibold font-cinzel-c">salad</h4>
                     </SwiperSlide>
                     <SwiperSlide>
                         <img src={slide2} />
+                        <h4 className="uppercase text-center -m-8 font-semibold font-cinzel-c">Pizzas</h4>
                     </SwiperSlide>
                     <SwiperSlide>
                         <img src={slide3} />
+                        <h4 className="uppercase text-center -m-8 font-semibold font-cinzel-c">desserts</h4>
                     </SwiperSlide>
                     <SwiperSlide>
                         <img src={slide4} />
+                        <h4 className="uppercase text-center -m-8 font-semibold font-cinzel-c">Dry Cake</h4>
+                    </SwiperSlide>
+                    <SwiperSlide>
+                        <img src={slide5} />
+                        <h4 className="uppercase text-center -m-8 font-semibold font-cinzel-c">salad</h4>
                     </SwiperSlide>
                     <SwiperSlide>
                         <img src={slide5} />
