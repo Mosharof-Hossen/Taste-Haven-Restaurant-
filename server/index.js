@@ -29,9 +29,20 @@ async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
+        const menuCollection = client.db("tasteHavenDb").collection("menu");
+
+        app.get("/menu", async (req, res) => {
+            const result = await menuCollection.find().toArray();
+            res.send(result);
+        })
+
+        app.get("/menu/:category", async (req, res) => {
+            const category = req.params.category;
+            const result = await menuCollection.find({ category: category }).toArray();
+            res.send(result)
+        })
 
 
-        
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
