@@ -5,7 +5,11 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        "cinzel-c": '"Cinzel", serif'
+      }
+    },
   },
   // eslint-disable-next-line no-undef
   plugins: [require('daisyui')],
