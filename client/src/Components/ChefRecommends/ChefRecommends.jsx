@@ -7,7 +7,6 @@ const ChefRecommends = () => {
     if (isLoading) {
         return
     }
-    console.log(data);
     const filtered = data.slice(0, 3);
     return (
         <div className="p-5 space-y-10">

@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 
 const ChefRecommendedCard = ({ item }) => {
     const { image , name,recipe } = item;
-    console.log(item);
     return (
         <div className="card card-compact bg-base-100 rounded shadow-xl">
             <figure>
