@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 
 const PopularItem = ({ item }) => {
-    console.log(item);
     const { image, name, recipe,price } = item;
     return (
         <div className='flex gap-5'>

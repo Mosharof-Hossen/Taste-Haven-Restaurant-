@@ -10,7 +10,6 @@ const PopularMenu = () => {
     if (isLoading) {
         return
     }
-    console.log(data);
 
     return (
         <div className="p-5 space-y-10">
@@ -22,7 +21,7 @@ const PopularMenu = () => {
             </div>
             <div className=" text-center">
                 <Link to={"/our-menu"}>
-                    <button className="text-xl uppercase border-b-4 rounded border-black px-4 py-1">View Full menu</button>
+                    <button className="text-xl uppercase border-b-4 rounded-lg border-black px-4 py-1">View Full menu</button>
                 </Link>
             </div>
         </div>
