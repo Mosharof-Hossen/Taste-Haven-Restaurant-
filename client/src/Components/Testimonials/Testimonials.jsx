@@ -13,7 +13,7 @@ import '@smastrom/react-rating/style.css'
 // import './styles.css';
 
 // import required modules
-import { Pagination, Navigation } from 'swiper/modules';
+import {  Navigation } from 'swiper/modules';
 import useFetchReviews from '../../API/useFetchReviews';
 
 const Testimonials = () => {
@@ -23,7 +23,7 @@ const Testimonials = () => {
     }
 
     return (
-        <div>
+        <div className='my-16'>
             <SectionTitle heading={"testimonials"} subHeading={'What Our Clients Say'}></SectionTitle>
             <div className="lg:px-28 md:px-12 px-2">
                 <Swiper
