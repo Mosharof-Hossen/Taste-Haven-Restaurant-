@@ -5,6 +5,7 @@ import OnlineOrder from "../../Components/OnlineOrder/OnlineOrder";
 import PopularMenu from "../../Components/PopularMenu/PopularMenu";
 import ShortContact from "../../Components/ShortContact/ShortContact";
 import TasteHaven from "../../Components/TasteHaven/TasteHaven";
+import Testimonials from "../../Components/Testimonials/Testimonials";
 
 const Home = () => {
     return (
@@ -16,6 +17,7 @@ const Home = () => {
             <ShortContact></ShortContact>
             <ChefRecommends></ChefRecommends>
             <ItemDisplay></ItemDisplay>
+            <Testimonials></Testimonials>
         </div>
     );
 };
