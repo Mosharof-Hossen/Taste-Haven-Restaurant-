@@ -59,6 +59,15 @@ async function run() {
             res.send({ count })
         })
 
+        app.get('/shop-item', async (req, res) => {
+            const { category, currentPage, limit = 6 } = req.query;
+            const filter = category ? { category } : {}
+            const totalItem = await menuCollection.countDocuments(filter);
+            const items = await menuCollection.find(filter).skip(currentPage * limit).limit(parseInt(limit)).toArray();
+            const totalPage = Math.ceil(totalItem / limit)
+            res.send({ totalItem, items, totalPage })
+        })
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
