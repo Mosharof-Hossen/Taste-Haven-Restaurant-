@@ -3,13 +3,17 @@ import bg from "../../assets/others/authentication.png"
 import { useForm } from "react-hook-form"
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaGithub, FaGoogle } from "react-icons/fa";
+import useAuthContext from "../../Hooks/useAuthContext";
+import Swal from "sweetalert2";
 
 
 const Login = () => {
     const [isCaptchaValid, setIsCaptchaValid] = useState(false);
-
+    const { loginByEmailPass } = useAuthContext();
+    const navigate = useNavigate();
+    const [err, setErr] = useState("");
 
     useEffect(() => {
         loadCaptchaEnginge(6);
@@ -30,7 +34,24 @@ const Login = () => {
         formState: { errors },
     } = useForm()
 
-    const onSubmit = (data) => console.log(data)
+    const onSubmit = (data) => {
+        loginByEmailPass(data.email, data.password)
+            .then(() => {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Login Successfully Done",
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                    .then(() => {
+                        navigate("/")
+                        setErr("")
+                    })
+            }).catch(() => {
+                setErr("Invalid Email or Password.")
+            })
+    }
     return (
         <div className=""
             style={{ backgroundImage: `url(${bg})` }}
@@ -65,11 +86,14 @@ const Login = () => {
                                 <label className="label">
                                     <LoadCanvasTemplate />
                                 </label>
-                                <input type="text" name="captcha" onBlur={handleCaptchaChange} placeholder="Enter the text above" className="input input-bordered" />                
+                                <input type="text" name="captcha" onBlur={handleCaptchaChange} placeholder="Enter the text above" className="input input-bordered" />
                             </div>
 
                             <div className="form-control mt-6">
                                 <button disabled={!isCaptchaValid} className="btn hover:bg-[#c29046] bg-[#D1A054] text-white text-xl">Login</button>
+                                {
+                                    err && <p className="text-red-500 text-center mt-2 font-semibold">{err}</p>
+                                }
                             </div>
                         </form>
                         <div className="space-y-3 mb-5">

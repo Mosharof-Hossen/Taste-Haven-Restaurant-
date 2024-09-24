@@ -1,18 +1,41 @@
 import loginImage from "../../assets/others/authentication2.png"
 import bg from "../../assets/others/authentication.png"
 import { useForm } from "react-hook-form"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaGithub, FaGoogle } from "react-icons/fa";
+import useAuthContext from "../../Hooks/useAuthContext";
+import Swal from 'sweetalert2'
+import { useState } from "react";
 
 
 const SignUp = () => {
+    const [err, setErr] = useState("")
+    const { createUserByEmailPass } = useAuthContext()
+    const navigate = useNavigate()
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm()
 
-    const onSubmit = (data) => console.log(data)
+    const onSubmit = (data) => {
+        createUserByEmailPass(data.email, data.password)
+            .then(() => {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Registration Successfully Done",
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                    .then(() => {
+                        setErr("")
+                        navigate("/")
+                    })
+            }).catch(() => {
+                setErr("Email already in use.")
+            })
+    }
     return (
         <div className=""
             style={{ backgroundImage: `url(${bg})` }}
@@ -56,6 +79,9 @@ const SignUp = () => {
 
                             <div className="form-control mt-6">
                                 <button className="btn hover:bg-[#c29046] bg-[#D1A054] text-white text-xl">Sign Up</button>
+                                {
+                                    err && <p className="text-red-500 font-semibold text-center mt-2">{err}</p>
+                                }
                             </div>
                         </form>
                         <div className="space-y-3 mb-5">
