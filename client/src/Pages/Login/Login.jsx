@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 
 const Login = () => {
     const [isCaptchaValid, setIsCaptchaValid] = useState(false);
-    const { loginByEmailPass } = useAuthContext();
+    const { loginByEmailPass, loginByGoogle, loginByGithub } = useAuthContext();
     const navigate = useNavigate();
     const [err, setErr] = useState("");
 
@@ -50,6 +50,39 @@ const Login = () => {
                     })
             }).catch(() => {
                 setErr("Invalid Email or Password.")
+            })
+    }
+
+    const handleGoogleLogin = () => {
+        loginByGoogle()
+            .then(() => {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Login Successfully Done",
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                    .then(() => {
+                        navigate("/")
+                        setErr("")
+                    })
+            })
+    }
+    const handleGithubLogin = () => {
+        loginByGithub()
+            .then(() => {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Login Successfully Done",
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                    .then(() => {
+                        navigate("/")
+                        setErr("")
+                    })
             })
     }
     return (
@@ -100,8 +133,8 @@ const Login = () => {
                             <p className="text-center text-[#D1A054] font-semibold">New here? Create A <Link to={"/signup"}><span className="underline">New Account.</span></Link></p>
                             <p className="text-center font-semibold">Or sign in with</p>
                             <div className="flex justify-center gap-3">
-                                <button className=" p-2 border-2 border-black rounded-full   "><FaGoogle className="text-2xl" /></button>
-                                <button className=" p-2 border-2 border-black rounded-full   "><FaGithub className="text-2xl" /></button>
+                                <button onClick={handleGoogleLogin} className=" p-2 border-2 border-black rounded-full   "><FaGoogle className="text-2xl" /></button>
+                                <button onClick={handleGithubLogin} className=" p-2 border-2 border-black rounded-full   "><FaGithub className="text-2xl" /></button>
                             </div>
                         </div>
                     </div>

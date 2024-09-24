@@ -7,12 +7,11 @@ import useAuthContext from "../../Hooks/useAuthContext";
 import Swal from 'sweetalert2'
 import { useState } from "react";
 import { updateProfile } from "firebase/auth";
-import auth from "../../Firebase/Firebase";
 
 
 const SignUp = () => {
     const [err, setErr] = useState("")
-    const { createUserByEmailPass } = useAuthContext()
+    const { createUserByEmailPass, loginByGoogle, loginByGithub } = useAuthContext()
     const navigate = useNavigate()
     const {
         register,
@@ -40,6 +39,38 @@ const SignUp = () => {
 
             }).catch(() => {
                 setErr("Email already in use.")
+            })
+    }
+    const handleGoogleLogin = () => {
+        loginByGoogle()
+            .then(() => {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Login Successfully Done",
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                    .then(() => {
+                        navigate("/")
+                        setErr("")
+                    })
+            })
+    }
+    const handleGithubLogin = () => {
+        loginByGithub()
+            .then(() => {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Login Successfully Done",
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                    .then(() => {
+                        navigate("/")
+                        setErr("")
+                    })
             })
     }
     return (
@@ -94,8 +125,8 @@ const SignUp = () => {
                             <p className="text-center text-[#D1A054] font-semibold">Already registered? <Link to={"/login"}><span className="underline">Log In.</span></Link></p>
                             <p className="text-center font-semibold">Or sign in with</p>
                             <div className="flex justify-center gap-3">
-                                <button className=" p-2 border-2 border-black rounded-full   "><FaGoogle className="text-2xl" /></button>
-                                <button className=" p-2 border-2 border-black rounded-full   "><FaGithub className="text-2xl" /></button>
+                                <button onClick={handleGoogleLogin} className=" p-2 border-2 border-black rounded-full   "><FaGoogle className="text-2xl" /></button>
+                                <button onClick={handleGithubLogin} className=" p-2 border-2 border-black rounded-full   "><FaGithub className="text-2xl" /></button>
                             </div>
                         </div>
                     </div>
