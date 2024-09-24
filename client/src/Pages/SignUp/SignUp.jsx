@@ -6,6 +6,8 @@ import { FaGithub, FaGoogle } from "react-icons/fa";
 import useAuthContext from "../../Hooks/useAuthContext";
 import Swal from 'sweetalert2'
 import { useState } from "react";
+import { updateProfile } from "firebase/auth";
+import auth from "../../Firebase/Firebase";
 
 
 const SignUp = () => {
@@ -20,18 +22,22 @@ const SignUp = () => {
 
     const onSubmit = (data) => {
         createUserByEmailPass(data.email, data.password)
-            .then(() => {
-                Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: "Registration Successfully Done",
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                    .then(() => {
+            .then((res) => {
+                updateProfile(res.user, {
+                    displayName: data.name,
+                }).then(() => {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Registration Successfully Done",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
                         setErr("")
                         navigate("/")
                     })
+                })
+
             }).catch(() => {
                 setErr("Email already in use.")
             })
