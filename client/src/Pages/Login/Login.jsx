@@ -3,6 +3,8 @@ import bg from "../../assets/others/authentication.png"
 import { useForm } from "react-hook-form"
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { FaGithub, FaGoogle } from "react-icons/fa";
 
 
 const Login = () => {
@@ -39,6 +41,7 @@ const Login = () => {
                         <img src={loginImage} alt="" />
                     </div>
                     <div className="card  w-full max-w-sm shrink-0 ">
+                        <h3 className="font-bold text-4xl text-center">Login</h3>
                         <form onSubmit={handleSubmit(onSubmit)} className="card-body">
                             <div className="form-control">
                                 <label className="label">
@@ -62,17 +65,21 @@ const Login = () => {
                                 <label className="label">
                                     <LoadCanvasTemplate />
                                 </label>
-                                <input type="text" name="captcha" onBlur={handleCaptchaChange} placeholder="Enter the text above" className="input input-bordered" />
-                                {
-                                    errors?.password?.type == "required" && <p className="text-sm text-red-500 p-1">Password is Required</p>
-                                }
-
+                                <input type="text" name="captcha" onBlur={handleCaptchaChange} placeholder="Enter the text above" className="input input-bordered" />                
                             </div>
 
                             <div className="form-control mt-6">
                                 <button disabled={!isCaptchaValid} className="btn hover:bg-[#c29046] bg-[#D1A054] text-white text-xl">Login</button>
                             </div>
                         </form>
+                        <div className="space-y-3 mb-5">
+                            <p className="text-center text-[#D1A054] font-semibold">New here? Create A <Link to={"/signup"}><span className="underline">New Account.</span></Link></p>
+                            <p className="text-center font-semibold">Or sign in with</p>
+                            <div className="flex justify-center gap-3">
+                                <button className=" p-2 border-2 border-black rounded-full   "><FaGoogle className="text-2xl" /></button>
+                                <button className=" p-2 border-2 border-black rounded-full   "><FaGithub className="text-2xl" /></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
