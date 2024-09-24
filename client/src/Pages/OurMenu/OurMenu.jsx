@@ -16,7 +16,7 @@ const OurMenu = () => {
         return <div className='text-center mt-32'><span className='loading loading-bars loading-lg'></span></div>
     }
     return (
-        <div>
+        <div className="mb-14">
             <PageCover title={'our menu'} img={img1} description={'would you like to try a dish?'}></PageCover>
             <div className="p-5 space-y-10">
                 <SectionTitle heading={"today's offer"} subHeading={"Don't Miss"}></SectionTitle>

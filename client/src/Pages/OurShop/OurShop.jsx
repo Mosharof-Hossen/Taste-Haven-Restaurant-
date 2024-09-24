@@ -1,5 +1,4 @@
 import { useState } from "react";
-import useFetchProductCount from "../../API/useFetchProductCount";
 import PageCover from "../../Shared/PageCover/PageCover";
 import shopBanner from "../../assets/shop/banner2.jpg"
 import useFetchShopItem from "../../API/useFetchShopItem";
@@ -14,13 +13,10 @@ const OurShop = () => {
         setActiveTab(tab);
         setCurrentPage(1)
     }
-    const { data, isError, isLoading } = useFetchShopItem(activeTab, currentPage - 1, itemPerPage);
-
-    console.log(data);
-
+    const { data, isLoading } = useFetchShopItem(activeTab, currentPage - 1, itemPerPage);
 
     return (
-        <div className="">
+        <div className="mb-14">
             <PageCover title={'our shop'} img={shopBanner}></PageCover>
             <div>
                 <div role="tablist" className="tabs font-bold tabs-bordered max-w-3xl mx-auto mt-12 p-5">
