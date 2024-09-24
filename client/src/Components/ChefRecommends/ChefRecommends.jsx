@@ -1,6 +1,6 @@
 import useFetchMenu from "../../API/useFetchMenu";
 import SectionTitle from "../SectionTitle/SectionTitle";
-import ChefRecommendedCard from "./ChefRecommendedCard";
+import ItemCard from "./ItemCard";
 
 const ChefRecommends = () => {
     const { data, isLoading } = useFetchMenu("/menu/salad");
@@ -13,7 +13,7 @@ const ChefRecommends = () => {
             <SectionTitle heading={'chef recommended'} subHeading={'Should Try'}></SectionTitle>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 col-span-1 gap-5">
                 {
-                    filtered?.map(item => <ChefRecommendedCard key={item._id} item={item}></ChefRecommendedCard>)
+                    filtered?.map(item => <ItemCard key={item._id} item={item}></ItemCard>)
                 }
             </div>
         </div>

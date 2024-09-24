@@ -15,7 +15,6 @@ const OurMenu = () => {
     if (isLoading) {
         return <div className='text-center mt-32'><span className='loading loading-bars loading-lg'></span></div>
     }
-    console.log(dessert);
     return (
         <div>
             <PageCover title={'our menu'} img={img1} description={'would you like to try a dish?'}></PageCover>
