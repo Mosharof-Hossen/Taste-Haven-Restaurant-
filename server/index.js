@@ -36,6 +36,7 @@ async function run() {
         await client.connect();
         const menuCollection = client.db("tasteHavenDb").collection("menu");
         const reviewsCollection = client.db("tasteHavenDb").collection('reviews')
+        const cartItemsCollection = client.db("tasteHavenDb").collection('cartItems')
 
 
         app.get("/menu", async (req, res) => {
@@ -66,6 +67,12 @@ async function run() {
             const items = await menuCollection.find(filter).skip(currentPage * limit).limit(parseInt(limit)).toArray();
             const totalPage = Math.ceil(totalItem / limit)
             res.send({ totalItem, items, totalPage })
+        })
+
+        app.post("/carts", async (req, res) => {
+            const data = req.body;
+            const result = await cartItemsCollection.insertOne(data);
+            res.send(result)
         })
 
         // Send a ping to confirm a successful connection
