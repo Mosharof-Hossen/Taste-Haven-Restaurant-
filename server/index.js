@@ -69,6 +69,12 @@ async function run() {
             res.send({ totalItem, items, totalPage })
         })
 
+        app.get("/carts/:email", async (req, res) => {
+            const email = req.params.email;
+            const result = await cartItemsCollection.find({ userEmail: email }).toArray();
+            res.send(result)
+        })
+
         app.post("/carts", async (req, res) => {
             const data = req.body;
             const result = await cartItemsCollection.insertOne(data);

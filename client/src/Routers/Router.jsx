@@ -12,6 +12,11 @@ import SignUp from "../Pages/SignUp/SignUp";
 import Main from "../Layout/Main";
 import Carts from "../Pages/Carts/Carts";
 import PrivateRoute from "./PrivateRoute";
+import UserProfile from "../Pages/Dashboard/UserProfile/UserProfile";
+import Reservation from "../Pages/Dashboard/Reservation/Reservation";
+import PaymentHistory from "../Pages/Dashboard/PaymentHistory/PaymentHistory";
+import AddReview from "../Pages/Dashboard/AddReview/AddReview";
+import MyBooking from "../Pages/Dashboard/MyBooking/MyBooking";
 
 const router = createBrowserRouter([
     {
@@ -49,8 +54,28 @@ const router = createBrowserRouter([
         element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
         children: [
             {
-                path: "carts",
+                path: "/dashboard",
+                element: <UserProfile></UserProfile>
+            },
+            {
+                path: "/dashboard/carts",
                 element: <Carts></Carts>
+            },
+            {
+                path: "/dashboard/reservation",
+                element: <Reservation></Reservation>
+            },
+            {
+                path: "payment-history",
+                element: <PaymentHistory></PaymentHistory>
+            },
+            {
+                path: "add-review",
+                element: <AddReview></AddReview>
+            },
+            {
+                path: "my-booking",
+                element: <MyBooking></MyBooking>
             }
 
         ]

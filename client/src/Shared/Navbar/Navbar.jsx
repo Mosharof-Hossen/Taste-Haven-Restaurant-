@@ -2,8 +2,13 @@ import { Link, NavLink } from "react-router-dom";
 import "./navbar.css"
 import useAuthContext from "../../Hooks/useAuthContext";
 import Swal from "sweetalert2";
+import { FaCartPlus } from "react-icons/fa";
+import useFetchGetCarts from "../../API/useFetchGetCarts";
+
+
 const Navbar = () => {
     const { user, logout } = useAuthContext();
+    const { data } = useFetchGetCarts();
     const handleLogout = () => {
         logout()
             .then(() => {
@@ -66,7 +71,14 @@ const Navbar = () => {
                     }
                 </ul>
             </div>
-            <div className="navbar-end">
+            <div className="navbar-end space-x-6">
+                {
+                    user &&
+                    <div className="indicator">
+                        <span className="indicator-item badge bg-[#D1A054] rounded-full text-white">{data?.length}</span>
+                        <Link to={"/dashboard/carts"}><button className="p-2 rounded-full text-white text-xl border-none"><FaCartPlus className="text-2xl" /></button></Link>
+                    </div>
+                }
                 {
                     user ?
                         <button onClick={handleLogout} className="btn bg-[#D1A054] text-white text-xl border-none">Logout</button>
