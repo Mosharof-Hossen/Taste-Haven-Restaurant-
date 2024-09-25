@@ -3,7 +3,7 @@ import bg from "../../assets/others/authentication.png"
 import { useForm } from "react-hook-form"
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import useAuthContext from "../../Hooks/useAuthContext";
 import Swal from "sweetalert2";
@@ -13,6 +13,7 @@ const Login = () => {
     const [isCaptchaValid, setIsCaptchaValid] = useState(false);
     const { loginByEmailPass, loginByGoogle, loginByGithub } = useAuthContext();
     const navigate = useNavigate();
+    const location = useLocation()
     const [err, setErr] = useState("");
 
     useEffect(() => {
@@ -45,7 +46,7 @@ const Login = () => {
                     timer: 1500
                 })
                     .then(() => {
-                        navigate("/")
+                        navigate(location?.state ? location.state : "/");
                         setErr("")
                     })
             }).catch(() => {
@@ -64,7 +65,7 @@ const Login = () => {
                     timer: 1500
                 })
                     .then(() => {
-                        navigate("/")
+                        navigate(location?.state ? location.state : "/");
                         setErr("")
                     })
             })
@@ -80,7 +81,7 @@ const Login = () => {
                     timer: 1500
                 })
                     .then(() => {
-                        navigate("/")
+                        navigate(location?.state ? location.state : "/");
                         setErr("")
                     })
             })
