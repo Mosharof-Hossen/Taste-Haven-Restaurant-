@@ -49,8 +49,7 @@ const Dashboard = () => {
                             {links}
                         </ul>
                     </div>
-                    <div className="lg:flex-1">
-                        content
+                    <div className="lg:flex-1 bg-slate-100 py-6 min-h-screen">
                         <Outlet></Outlet>
                     </div>
                 </div>

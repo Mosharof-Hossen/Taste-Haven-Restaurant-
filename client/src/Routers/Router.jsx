@@ -10,13 +10,13 @@ import ContactUs from "../Pages/ContactUs/ContactUs";
 import Login from "../Pages/Login/Login";
 import SignUp from "../Pages/SignUp/SignUp";
 import Main from "../Layout/Main";
-import Carts from "../Pages/Carts/Carts";
 import PrivateRoute from "./PrivateRoute";
 import UserProfile from "../Pages/Dashboard/UserProfile/UserProfile";
 import Reservation from "../Pages/Dashboard/Reservation/Reservation";
 import PaymentHistory from "../Pages/Dashboard/PaymentHistory/PaymentHistory";
 import AddReview from "../Pages/Dashboard/AddReview/AddReview";
 import MyBooking from "../Pages/Dashboard/MyBooking/MyBooking";
+import Carts from "../Pages/Dashboard/Carts/Carts";
 
 const router = createBrowserRouter([
     {
