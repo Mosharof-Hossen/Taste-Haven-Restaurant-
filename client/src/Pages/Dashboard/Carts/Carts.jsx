@@ -1,15 +1,33 @@
 import { FaTrash } from "react-icons/fa";
 import useFetchGetCarts from "../../../API/useFetchGetCarts";
 import SectionTitle from "../../../Components/SectionTitle/SectionTitle";
+import Swal from "sweetalert2";
+import useFetchDeleteItemFromCart from "../../../API/useFetchDeleteItemFromCart";
 
 const Carts = () => {
     const { data, isLoading } = useFetchGetCarts();
+    const itemDeleteMutation = useFetchDeleteItemFromCart()
 
     if (isLoading) {
         return <div className='text-center mt-32'><span className='loading loading-bars loading-lg'></span></div>
     }
-    console.log(data);
     const totalPrice = data.reduce((total, item) => total + item.price, 0);
+
+    const handleDeleteItemFromCart = (id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Are You Want to Delete This Item",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                itemDeleteMutation.mutate(id);
+            }
+        });
+    }
     return (
         <div className="">
             <SectionTitle heading={"wanna add More?"} subHeading={"MY Cart"}></SectionTitle>
@@ -46,7 +64,7 @@ const Carts = () => {
                                         <td>{item.itemName}</td>
                                         <td>${item.price}</td>
                                         <td>
-                                            <button className="p-2 bg-red-700 rounded text-white text-xl"><FaTrash></FaTrash></button>
+                                            <button onClick={() => handleDeleteItemFromCart(item._id)} className="p-2 bg-red-700 rounded text-white text-xl"><FaTrash></FaTrash></button>
                                         </td>
                                     </tr>)
                                 }
