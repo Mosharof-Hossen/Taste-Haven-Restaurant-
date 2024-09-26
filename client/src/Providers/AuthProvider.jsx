@@ -2,6 +2,7 @@ import { createUserWithEmailAndPassword, GithubAuthProvider, GoogleAuthProvider,
 import PropTypes from 'prop-types';
 import { createContext, useEffect, useState } from 'react';
 import auth from '../Firebase/Firebase';
+import useAxios from '../Hooks/useAxios';
 
 export const AuthContext = createContext(null);
 
@@ -10,6 +11,7 @@ const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const googleProvider = new GoogleAuthProvider();
     const githubProvider = new GithubAuthProvider();
+    const axios = useAxios();
     // CreateUser
     const createUserByEmailPass = (email, password) => {
         setLoading(true);
@@ -41,15 +43,20 @@ const AuthProvider = ({ children }) => {
         const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
             setLoading(false)
+            console.log("current user:", currentUser);
+            const jwt = { email: currentUser?.email }
             if (currentUser) {
-                console.log(currentUser);
+                axios.post("/jwt", jwt)
+            }
+            else {
+                axios.post("/logout", jwt)
+                    .then(res => console.log(res))
             }
             return () => {
                 return unSubscribe()
             }
         })
-    }, [])
-    console.log(user);
+    }, [axios])
     const authInfo = {
         user,
         createUserByEmailPass,

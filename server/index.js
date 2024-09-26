@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 require("dotenv").config()
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 
 const port = process.env.PORT || 3000;
 
@@ -15,7 +17,15 @@ app.use(cors({
     ],
     credentials: true
 }));
+app.use(cookieParser())
 
+
+
+const cookieOptions = {
+    // httpOnly: true,
+    sameSite: "None",
+    // secure: true,
+};
 
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
@@ -39,6 +49,23 @@ async function run() {
         const cartItemsCollection = client.db("tasteHavenDb").collection('cartItems')
         const usersCollection = client.db("tasteHavenDb").collection('users')
 
+        // JWT
+        app.post("/jwt", async (req, res) => {
+            const userInfo = req.body
+            console.log(userInfo);
+            const token = jwt.sign(userInfo, process.env.JWT_TOKEN, { expiresIn: '1h' })
+            res.cookie("token", token, cookieOptions)
+            res.send({ success: true })
+        })
+
+        app.post("/logout", async (req, res) => {
+            res.clearCookie('token', { ...cookieOptions, maxAge: 0 })
+            res.send({ success: "token remove" })
+        })
+
+
+
+        // API *****************************************
 
         app.get("/menu", async (req, res) => {
             const result = await menuCollection.find().toArray();
