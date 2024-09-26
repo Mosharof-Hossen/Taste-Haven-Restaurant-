@@ -7,12 +7,14 @@ import useAuthContext from "../../Hooks/useAuthContext";
 import Swal from 'sweetalert2'
 import { useState } from "react";
 import { updateProfile } from "firebase/auth";
+import useFetchPostUserInfo from "../../API/useFetchPostUserInfo";
 
 
 const SignUp = () => {
     const [err, setErr] = useState("")
     const { createUserByEmailPass, loginByGoogle, loginByGithub } = useAuthContext()
     const navigate = useNavigate()
+    const userInfoMutation = useFetchPostUserInfo();
     const {
         register,
         handleSubmit,
@@ -32,6 +34,11 @@ const SignUp = () => {
                         showConfirmButton: false,
                         timer: 1500
                     }).then(() => {
+                        userInfoMutation.mutate({
+                            email: data.email,
+                            displayName: data.name,
+                            status: "user"
+                        })
                         setErr("")
                         navigate("/")
                     })
@@ -43,7 +50,13 @@ const SignUp = () => {
     }
     const handleGoogleLogin = () => {
         loginByGoogle()
-            .then(() => {
+            .then((result) => {
+                // console.log(result.user);
+                userInfoMutation.mutate({
+                    email: result.user.email,
+                    displayName: result.user.displayName,
+                    status: "user"
+                })
                 Swal.fire({
                     position: "top-end",
                     icon: "success",
@@ -59,7 +72,12 @@ const SignUp = () => {
     }
     const handleGithubLogin = () => {
         loginByGithub()
-            .then(() => {
+            .then((result) => {
+                userInfoMutation.mutate({
+                    email: result.user.email,
+                    displayName: result.user.displayName,
+                    status: "user"
+                })
                 Swal.fire({
                     position: "top-end",
                     icon: "success",

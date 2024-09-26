@@ -7,6 +7,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import useAuthContext from "../../Hooks/useAuthContext";
 import Swal from "sweetalert2";
+import useFetchPostUserInfo from "../../API/useFetchPostUserInfo";
 
 
 const Login = () => {
@@ -15,6 +16,7 @@ const Login = () => {
     const navigate = useNavigate();
     const location = useLocation()
     const [err, setErr] = useState("");
+    const userInfoMutation = useFetchPostUserInfo();
 
     useEffect(() => {
         loadCaptchaEnginge(6);
@@ -56,7 +58,12 @@ const Login = () => {
 
     const handleGoogleLogin = () => {
         loginByGoogle()
-            .then(() => {
+            .then((result) => {
+                userInfoMutation.mutate({
+                    email: result.user.email,
+                    displayName: result.user.displayName,
+                    status: "user"
+                })
                 Swal.fire({
                     position: "top-end",
                     icon: "success",
@@ -72,7 +79,12 @@ const Login = () => {
     }
     const handleGithubLogin = () => {
         loginByGithub()
-            .then(() => {
+            .then((result) => {
+                userInfoMutation.mutate({
+                    email: result.user.email,
+                    displayName: result.user.displayName,
+                    status: "user"
+                })
                 Swal.fire({
                     position: "top-end",
                     icon: "success",

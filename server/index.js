@@ -37,6 +37,7 @@ async function run() {
         const menuCollection = client.db("tasteHavenDb").collection("menu");
         const reviewsCollection = client.db("tasteHavenDb").collection('reviews')
         const cartItemsCollection = client.db("tasteHavenDb").collection('cartItems')
+        const usersCollection = client.db("tasteHavenDb").collection('users')
 
 
         app.get("/menu", async (req, res) => {
@@ -84,6 +85,23 @@ async function run() {
         app.post("/carts", async (req, res) => {
             const data = req.body;
             const result = await cartItemsCollection.insertOne(data);
+            res.send(result)
+        })
+
+        // *************** user and admin section **************
+        app.post("/users", async (req, res) => {
+            const user = req.body;
+            const filter = { email: user.email };
+            const option = { upsert: true };
+            const updateUser = {
+                $set: {
+                    email: user.email,
+                    name: user.displayName,
+                    status: user.status
+                }
+            }
+            console.log(updateUser);
+            const result = await usersCollection.updateOne(filter, updateUser, option);
             res.send(result)
         })
 
