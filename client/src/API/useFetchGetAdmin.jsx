@@ -10,12 +10,12 @@ const useFetchGetAdmin = () => {
         const res = await axios.get(`/user/admin/${email}`);
         return res.data;
     }
-    const { data, refetch } = useQuery({
-        queryKey: ["adminVerification", user.email],
-        queryFn: () => getAdminInfo(user.email),
-        enabled: !!user.email,
+    const { data, isLoading } = useQuery({
+        queryKey: ["adminVerification", user?.email],
+        queryFn: () => getAdminInfo(user?.email),
+        enabled: !!user?.email,
     })
-    return { data, refetch }
+    return { data, isLoading }
 };
 
 export default useFetchGetAdmin;

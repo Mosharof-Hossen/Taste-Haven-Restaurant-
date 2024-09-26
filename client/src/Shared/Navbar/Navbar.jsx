@@ -4,11 +4,18 @@ import useAuthContext from "../../Hooks/useAuthContext";
 import Swal from "sweetalert2";
 import { FaCartPlus } from "react-icons/fa";
 import useFetchGetCarts from "../../API/useFetchGetCarts";
+import useFetchGetAdmin from "../../API/useFetchGetAdmin";
 
 
 const Navbar = () => {
+    const { data: adminInfo, isLoading } = useFetchGetAdmin();
     const { user, logout } = useAuthContext();
     const { data } = useFetchGetCarts();
+
+    if (isLoading) {
+        return <div className='text-center mt-32'><span className='loading loading-bars loading-lg'></span></div>
+    }
+
     const handleLogout = () => {
         logout()
             .then(() => {
@@ -23,7 +30,7 @@ const Navbar = () => {
     }
     const links = <>
         <NavLink className={"md:ml-2 p-1 font-bold text-white"} to={"/"} ><li>HOME</li></NavLink>
-        <NavLink className={"md:ml-2 p-1 font-bold text-white"} to={"/dashboard"} ><li>DASHBOARD</li></NavLink>
+        <NavLink className={"md:ml-2 p-1 font-bold text-white"} to={adminInfo?.admin ? "/dashboard/admin" : "/dashboard"} ><li>DASHBOARD</li></NavLink>
         <NavLink className={"md:ml-2 p-1 font-bold text-white"} to={"/our-menu"} ><li>OUR MENU</li></NavLink>
         <NavLink className={"md:ml-2 p-1 font-bold text-white"} to={"/our-shop"} ><li>OUR SHOP</li></NavLink>
         <NavLink className={"md:ml-2 p-1 font-bold text-white"} to={"/contact-us"} ><li>CONTACT US</li></NavLink>

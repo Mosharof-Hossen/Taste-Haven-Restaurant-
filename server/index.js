@@ -133,8 +133,34 @@ async function run() {
         })
 
         // *************** user and admin section **************
-        app.get("/user/admin/:email", async (req, res) => {
-
+        app.get("/user/admin/:email", verifyToken, async (req, res) => {
+            const email = req.params.email;
+            const tokenEmail = req.tokenUser.email;
+            if (email !== tokenEmail) {
+                return res.status(403).send('Unauthorized User.');
+            }
+            const query = { email: email };
+            const user = await usersCollection.findOne(query);
+            let admin = true
+            if (user) {
+                admin = user?.status === "admin"
+            }
+            res.send({ admin });
+        })
+        app.get("/admin/users/:email", verifyToken, async (req, res) => {
+            const email = req.params.email;
+            const tokenEmail = req.tokenUser.email;
+            console.log(email);
+            if (email !== tokenEmail) {
+                return res.status(403).send('Unauthorized User.');
+            }
+            const query = { email: email };
+            const user = await usersCollection.findOne(query);
+            if(user.status !== 'admin'){
+                return res.status(403).send('You are not admin.');
+            }
+            const result = await usersCollection.find().toArray();
+            res.send(result)
         })
 
         app.post("/users", async (req, res) => {

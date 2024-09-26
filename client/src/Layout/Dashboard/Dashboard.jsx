@@ -2,9 +2,16 @@ import { Link, NavLink, Outlet } from "react-router-dom";
 import { MdEmail, MdOutlinePayment, MdOutlineReviews } from "react-icons/md";
 import { FaAlignJustify, FaCalendarAlt, FaHome, FaRegAddressBook, FaShoppingBag, FaShoppingCart, FaUsers } from "react-icons/fa";
 import { TbToolsKitchen2 } from "react-icons/tb";
+import useFetchGetAdmin from "../../API/useFetchGetAdmin";
 
 const Dashboard = () => {
-    const admin = false;
+    const { data, isLoading } = useFetchGetAdmin();
+
+    if (isLoading) {
+        return <div className='text-center mt-32'><span className='loading loading-bars loading-lg'></span></div>
+    }
+    console.log(data);
+    const admin = data.admin;
     const links = <>
         {
             admin ?
