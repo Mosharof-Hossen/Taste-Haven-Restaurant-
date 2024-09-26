@@ -10,6 +10,7 @@ app = express();
 
 // Middleware 
 
+app.use(cookieParser())
 app.use(express.json())
 app.use(cors({
     origin: [
@@ -17,14 +18,28 @@ app.use(cors({
     ],
     credentials: true
 }));
-app.use(cookieParser())
 
+
+
+const verifyToken = (req, res, next) => {
+    const token = req?.cookies?.token;
+    if (!token) {
+        return res.status(403).json({ message: 'Access denied. Token is missing.' })
+    }
+    jwt.verify(token, process.env.JWT_TOKEN, async (err, user) => {
+        if (err) {
+            return res.status(403).send('Invalid or expired token.');
+        }
+        req.tokenUser = user;
+        next()
+    })
+}
 
 
 const cookieOptions = {
     // httpOnly: true,
-    sameSite: "None",
-    // secure: true,
+    // sameSite: "None",
+    // secure: false,
 };
 
 
@@ -52,17 +67,14 @@ async function run() {
         // JWT
         app.post("/jwt", async (req, res) => {
             const userInfo = req.body
-            console.log(userInfo);
             const token = jwt.sign(userInfo, process.env.JWT_TOKEN, { expiresIn: '1h' })
             res.cookie("token", token, cookieOptions)
             res.send({ success: true })
         })
 
         app.post("/logout", async (req, res) => {
-            res.clearCookie('token', { ...cookieOptions, maxAge: 0 })
-            res.send({ success: "token remove" })
+            res.clearCookie('token', { ...cookieOptions, maxAge: 0 }).send({ success: "token remove" })
         })
-
 
 
         // API *****************************************
@@ -97,11 +109,16 @@ async function run() {
             res.send({ totalItem, items, totalPage })
         })
 
-        app.get("/carts/:email", async (req, res) => {
+        app.get("/carts/:email", verifyToken, async (req, res) => {
             const email = req.params.email;
+            const tokenEmail = req.tokenUser.email;
+            if (!(tokenEmail == email)) {
+                return res.status(403).send('Unauthorized User.');
+            }
             const result = await cartItemsCollection.find({ userEmail: email }).toArray();
             res.send(result)
         })
+
         app.delete("/carts/:id", async (req, res) => {
             const id = req.params.id;
             console.log(id);
@@ -116,6 +133,10 @@ async function run() {
         })
 
         // *************** user and admin section **************
+        app.get("/user/admin/:email", async (req, res) => {
+
+        })
+
         app.post("/users", async (req, res) => {
             const user = req.body;
             const filter = { email: user.email };
@@ -127,10 +148,11 @@ async function run() {
                     status: user.status
                 }
             }
-            console.log(updateUser);
             const result = await usersCollection.updateOne(filter, updateUser, option);
             res.send(result)
         })
+
+
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
