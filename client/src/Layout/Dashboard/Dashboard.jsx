@@ -1,15 +1,38 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
-import { MdOutlinePayment, MdOutlineReviews } from "react-icons/md";
-import { FaCalendarAlt, FaHome, FaRegAddressBook, FaShoppingCart } from "react-icons/fa";
+import { MdEmail, MdOutlinePayment, MdOutlineReviews } from "react-icons/md";
+import { FaAlignJustify, FaCalendarAlt, FaHome, FaRegAddressBook, FaShoppingBag, FaShoppingCart, FaUsers } from "react-icons/fa";
+import { TbToolsKitchen2 } from "react-icons/tb";
 
 const Dashboard = () => {
+    const admin = false;
     const links = <>
-        <NavLink to={"/dashboard"} end className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <FaHome /> <li> Home</li></NavLink>
-        <NavLink to={"/dashboard/reservation"} className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <FaCalendarAlt /> <li> reservation</li></NavLink>
-        <NavLink to={"/dashboard/payment-history"} className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <MdOutlinePayment /> <li> Payment History</li></NavLink>
-        <NavLink to={"/dashboard/carts"} className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <FaShoppingCart /> <li> my cart</li></NavLink>
-        <NavLink to={"/dashboard/add-review"} className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <MdOutlineReviews /> <li> add review</li></NavLink>
-        <NavLink to={"/dashboard/my-booking"} className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <FaRegAddressBook /> <li> My booking</li></NavLink>
+        {
+            admin ?
+                <>
+                    <NavLink to={"/dashboard/admin"} end className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <FaHome /> <li> Admin Home</li></NavLink>
+                    <NavLink to={"/dashboard/admin/add-item"} end className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <TbToolsKitchen2 /> <li> add item</li></NavLink>
+                    <NavLink to={"/dashboard/admin/manage-items"} end className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <FaAlignJustify /> <li> manage items</li></NavLink>
+                    <NavLink to={"/dashboard/admin/manage-bookings"} end className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <FaRegAddressBook /> <li> manage bookings</li></NavLink>
+                    <NavLink to={"/dashboard/admin/all-users"} end className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <FaUsers /> <li> all users</li></NavLink>
+                </>
+                :
+                <>
+                    <NavLink to={"/dashboard"} end className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <FaHome /> <li> Home</li></NavLink>
+                    <NavLink to={"/dashboard/reservation"} className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <FaCalendarAlt /> <li> reservation</li></NavLink>
+                    <NavLink to={"/dashboard/payment-history"} className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <MdOutlinePayment /> <li> Payment History</li></NavLink>
+                    <NavLink to={"/dashboard/carts"} className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <FaShoppingCart /> <li> my cart</li></NavLink>
+                    <NavLink to={"/dashboard/add-review"} className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <MdOutlineReviews /> <li> add review</li></NavLink>
+                    <NavLink to={"/dashboard/my-booking"} className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <FaRegAddressBook /> <li> My booking</li></NavLink>
+                </>
+        }
+
+
+        <div className="divider divider-warning"></div>
+
+        <NavLink to={"/"} className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <FaRegAddressBook /> <li> Home</li></NavLink>
+        <NavLink to={"/our-menu"} className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <FaAlignJustify /> <li> Menu</li></NavLink>
+        <NavLink to={"/our-shop"} className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <FaShoppingBag /> <li> Shop</li></NavLink>
+        <NavLink to={"/contact-us"} className="flex items-center text-white text-xl font-semibold gap-2 uppercase font-cinzel-c"> <MdEmail /> <li> contact</li></NavLink>
 
     </>
     return (
