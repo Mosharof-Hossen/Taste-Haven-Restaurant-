@@ -3,10 +3,12 @@ import useFetchGetAllUsers from "../../API/useFetchGetAllUsers";
 import SectionTitle from "../../Components/SectionTitle/SectionTitle";
 import Swal from "sweetalert2";
 import useFetchDeleteUser from "../../API/useFetchDeleteUser";
+import useFetchUpdateUserStatus from "../../API/useFetchUpdateUserStatus";
 
 const AllUsers = () => {
     const userDeleteMutation = useFetchDeleteUser()
     const { data, isLoading } = useFetchGetAllUsers();
+    const statusUpdateMutation = useFetchUpdateUserStatus();
     if (isLoading) {
         return <div className='text-center mt-32'><span className='loading loading-bars loading-lg'></span></div>
     }
@@ -26,6 +28,22 @@ const AllUsers = () => {
         });
     }
     console.log(data);
+    const handleUpdateUserStatus = (email) => {
+        Swal.fire({
+            title: "Type your wish: 'admin' or 'user'",
+            input: "text",
+            inputAttributes: {
+                autocapitalize: "off"
+            },
+            showCancelButton: true,
+            confirmButtonText: "Status Change",
+            showLoaderOnConfirm: true,
+            preConfirm: async (status) => {
+                statusUpdateMutation.mutate({email,status})
+            },
+
+        })
+    }
 
     return (
         <div className="">
@@ -57,7 +75,9 @@ const AllUsers = () => {
                                             {user.name}
                                         </td>
                                         <td>{user.email}</td>
-                                        <td>{user.status}</td>
+                                        <td>
+                                            <button onClick={() => handleUpdateUserStatus(user.email)} className="btn">{user.status}</button>
+                                        </td>
                                         <td>
                                             <button onClick={() => handleDeleteUserFromCollection(user.email)} className="p-2 bg-red-700 rounded text-white text-xl"><FaTrash></FaTrash></button>
                                         </td>

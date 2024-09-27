@@ -148,6 +148,24 @@ async function run() {
             res.send({ admin });
         })
 
+        app.put("/admin/user/status", verifyToken, async (req, res) => {
+            const tokenEmail = req.tokenUser.email;
+            const query = { email: tokenEmail };
+            const user = await usersCollection.findOne(query);
+            if (user?.status !== 'admin') {
+                return res.status(403).send('You are not admin.');
+            }
+            const filter = { email: req.body.email };
+            console.log(req.body);
+            const updatedStatus = {
+                $set: {
+                    status: req.body.status
+                }
+            }
+            const result = await usersCollection.updateOne(filter,updatedStatus);
+            res.send(result)
+        })
+
         app.delete("/admin/users/:email", verifyToken, async (req, res) => {
             const email = req.params.email;
             const tokenEmail = req.tokenUser.email;
