@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 const PrivateAdminRoute = ({ children }) => {
     const { user, loading } = useAuthContext();
     const { data, isLoading } = useFetchGetAdmin()
-    console.log(data.admin)
     const location = useLocation();
 
     if (loading || isLoading) {
@@ -17,7 +16,7 @@ const PrivateAdminRoute = ({ children }) => {
         return children
     }
 
-    return <Navigate to={"/login"} state={location.pathname} ></Navigate>
+    return <Navigate to={"/"} state={location.pathname} ></Navigate>
 };
 
 PrivateAdminRoute.propTypes = {

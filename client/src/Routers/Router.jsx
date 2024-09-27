@@ -88,7 +88,7 @@ const router = createBrowserRouter([
             // ***************** Admin routes *********************
             {
                 path: '/dashboard/admin',
-                element: <AdminHome></AdminHome>
+                element: <PrivateAdminRoute><AdminHome></AdminHome></PrivateAdminRoute>
             },
             {
                 path: "/dashboard/admin/add-item",
@@ -100,11 +100,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "/dashboard/admin/manage-bookings",
-                element: <ManageBookings></ManageBookings>
+                element: <PrivateAdminRoute><ManageBookings></ManageBookings></PrivateAdminRoute>
             },
             {
                 path: "/dashboard/admin/all-users",
-                element: <AllUsers></AllUsers>
+                element: <PrivateAdminRoute><AllUsers></AllUsers></PrivateAdminRoute>
             }
 
         ]

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect } from 'react';
-import useAuthContext from './useAuthContext';
+import { signOut } from 'firebase/auth';
+import auth from '../Firebase/Firebase';
 
 const axiosInstance = axios.create({
     baseURL: "http://localhost:3000",
@@ -8,8 +9,6 @@ const axiosInstance = axios.create({
 })
 
 const useAxios = () => {
-    const { logout, loading } = useAuthContext() || {}
-    // console.log(user);
 
     useEffect(() => {
         axiosInstance.interceptors.response.use(
@@ -19,16 +18,11 @@ const useAxios = () => {
             (err) => {
                 console.log(err);
                 if (err?.response?.status === 403 || err?.response?.status === 404) {
-                    logout()
+                    signOut(auth);
                 }
             }
         )
-    }, [logout])
-
-
-    if (loading) {
-        return <div className='text-center mt-32'><span className='loading loading-bars loading-lg'></span></div>
-    }
+    }, [])
 
     return axiosInstance;
 };
