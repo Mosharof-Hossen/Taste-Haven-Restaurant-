@@ -147,16 +147,29 @@ async function run() {
             }
             res.send({ admin });
         })
+
+        app.delete("/admin/users/:email", verifyToken, async (req, res) => {
+            const email = req.params.email;
+            const tokenEmail = req.tokenUser.email;
+            const query = { email: tokenEmail };
+            const user = await usersCollection.findOne(query);
+            if (user?.status !== 'admin') {
+                return res.status(403).send('You are not admin.');
+            }
+            const result = await usersCollection.deleteOne({ email: email });
+            res.send(result)
+
+        })
+
         app.get("/admin/users/:email", verifyToken, async (req, res) => {
             const email = req.params.email;
             const tokenEmail = req.tokenUser.email;
-            console.log(email);
             if (email !== tokenEmail) {
                 return res.status(403).send('Unauthorized User.');
             }
             const query = { email: email };
             const user = await usersCollection.findOne(query);
-            if(user.status !== 'admin'){
+            if (user.status !== 'admin') {
                 return res.status(403).send('You are not admin.');
             }
             const result = await usersCollection.find().toArray();

@@ -1,16 +1,32 @@
 import { FaTrash } from "react-icons/fa";
 import useFetchGetAllUsers from "../../API/useFetchGetAllUsers";
 import SectionTitle from "../../Components/SectionTitle/SectionTitle";
+import Swal from "sweetalert2";
+import useFetchDeleteUser from "../../API/useFetchDeleteUser";
 
 const AllUsers = () => {
-
+    const userDeleteMutation = useFetchDeleteUser()
     const { data, isLoading } = useFetchGetAllUsers();
     if (isLoading) {
         return <div className='text-center mt-32'><span className='loading loading-bars loading-lg'></span></div>
     }
-    const handleDeleteUserFromCollection = (id) => {
-        console.log(id);
+    const handleDeleteUserFromCollection = (email) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Are You Want to Delete This User",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                userDeleteMutation.mutate(email);
+            }
+        });
     }
+    console.log(data);
+
     return (
         <div className="">
             <SectionTitle heading={"MANAGE ALL USERS"} subHeading={"How Many?"}></SectionTitle>
@@ -38,16 +54,12 @@ const AllUsers = () => {
                                     data.map((user, i) => <tr key={user._id}>
                                         <th>{i + 1}</th>
                                         <td>
-                                            <div className="avatar">
-                                                <div className="w-12 rounded">
-                                                    {user.name}
-                                                </div>
-                                            </div>
+                                            {user.name}
                                         </td>
                                         <td>{user.email}</td>
                                         <td>{user.status}</td>
                                         <td>
-                                            <button onClick={() => handleDeleteUserFromCollection(user._id)} className="p-2 bg-red-700 rounded text-white text-xl"><FaTrash></FaTrash></button>
+                                            <button onClick={() => handleDeleteUserFromCollection(user.email)} className="p-2 bg-red-700 rounded text-white text-xl"><FaTrash></FaTrash></button>
                                         </td>
                                     </tr>)
                                 }

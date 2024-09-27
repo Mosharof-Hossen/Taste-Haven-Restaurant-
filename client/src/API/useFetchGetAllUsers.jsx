@@ -9,12 +9,12 @@ const useFetchGetAllUsers = () => {
         const res = await axios.get(`/admin/users/${email}`);
         return res.data;
     }
-    const { data, isLoading } = useQuery({
+    const { data, isLoading, refetch } = useQuery({
         queryKey: ["allUsers", user?.email],
         queryFn: () => getAllUsersFunction(user?.email),
         enabled: !!user?.email
     })
-    return { data, isLoading }
+    return { data, isLoading, refetch }
 };
 
 export default useFetchGetAllUsers;
