@@ -76,7 +76,7 @@ const AllUsers = () => {
                                         </td>
                                         <td>{user.email}</td>
                                         <td>
-                                            <button onClick={() => handleUpdateUserStatus(user.email)} className="btn">{user.status}</button>
+                                            <button onClick={() => handleUpdateUserStatus(user.email)} className="btn">{user.status?user.status:"Change"}</button>
                                         </td>
                                         <td>
                                             <button onClick={() => handleDeleteUserFromCollection(user.email)} className="p-2 bg-red-700 rounded text-white text-xl"><FaTrash></FaTrash></button>

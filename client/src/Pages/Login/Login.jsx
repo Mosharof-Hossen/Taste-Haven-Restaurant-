@@ -62,7 +62,6 @@ const Login = () => {
                 userInfoMutation.mutate({
                     email: result.user.email,
                     displayName: result.user.displayName,
-                    status: "user"
                 })
                 Swal.fire({
                     position: "top-end",
@@ -83,7 +82,6 @@ const Login = () => {
                 userInfoMutation.mutate({
                     email: result.user.email,
                     displayName: result.user.displayName,
-                    status: "user"
                 })
                 Swal.fire({
                     position: "top-end",

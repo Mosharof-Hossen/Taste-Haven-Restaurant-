@@ -202,7 +202,6 @@ async function run() {
                 $set: {
                     email: user.email,
                     name: user.displayName,
-                    status: user.status
                 }
             }
             const result = await usersCollection.updateOne(filter, updateUser, option);

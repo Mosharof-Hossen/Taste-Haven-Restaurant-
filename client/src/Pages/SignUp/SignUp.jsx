@@ -37,7 +37,6 @@ const SignUp = () => {
                         userInfoMutation.mutate({
                             email: data.email,
                             displayName: data.name,
-                            status: "user"
                         })
                         setErr("")
                         navigate("/")
@@ -55,7 +54,6 @@ const SignUp = () => {
                 userInfoMutation.mutate({
                     email: result.user.email,
                     displayName: result.user.displayName,
-                    status: "user"
                 })
                 Swal.fire({
                     position: "top-end",
@@ -76,7 +74,6 @@ const SignUp = () => {
                 userInfoMutation.mutate({
                     email: result.user.email,
                     displayName: result.user.displayName,
-                    status: "user"
                 })
                 Swal.fire({
                     position: "top-end",
