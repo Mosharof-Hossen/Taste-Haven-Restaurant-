@@ -11,6 +11,7 @@ const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const googleProvider = new GoogleAuthProvider();
     const githubProvider = new GithubAuthProvider();
+  
     const axios = useAxios();
     // CreateUser
     const createUserByEmailPass = (email, password) => {
@@ -36,7 +37,7 @@ const AuthProvider = ({ children }) => {
     // logout
     const logout = () => {
         setLoading(true)
-        return signOut(auth)
+        return signOut(auth);
     }
 
     useEffect(() => {

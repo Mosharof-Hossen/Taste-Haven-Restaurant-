@@ -15,6 +15,7 @@ const Login = () => {
     const { loginByEmailPass, loginByGoogle, loginByGithub } = useAuthContext();
     const navigate = useNavigate();
     const location = useLocation()
+    console.log(location);
     const [err, setErr] = useState("");
     const userInfoMutation = useFetchPostUserInfo();
 

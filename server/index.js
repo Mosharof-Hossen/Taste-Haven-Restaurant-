@@ -3,6 +3,8 @@ const cors = require('cors');
 require("dotenv").config()
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+
 
 const port = process.env.PORT || 3000;
 
@@ -36,6 +38,8 @@ const verifyToken = (req, res, next) => {
 }
 
 
+
+
 const cookieOptions = {
     // httpOnly: true,
     // sameSite: "None",
@@ -43,7 +47,6 @@ const cookieOptions = {
 };
 
 
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@cluster0.f3oc9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -133,6 +136,19 @@ async function run() {
         })
 
         // *************** user and admin section **************
+
+        const verifyAdmin = async (req, res, next) => {
+            const email = req.tokenUser.email;
+            const query = { email: email };
+            console.log(query);
+            const user = await usersCollection.findOne(query);
+            const isAdmin = user?.status === "admin";
+            if (!isAdmin) {
+                return res.status(403).send({ message: "Forbidden Access." });
+            }
+            next()
+        }
+        // Admin verification
         app.get("/user/admin/:email", verifyToken, async (req, res) => {
             const email = req.params.email;
             const tokenEmail = req.tokenUser.email;
@@ -141,20 +157,14 @@ async function run() {
             }
             const query = { email: email };
             const user = await usersCollection.findOne(query);
-            let admin = true
+            let admin = false
             if (user) {
                 admin = user?.status === "admin"
             }
             res.send({ admin });
         })
 
-        app.put("/admin/user/status", verifyToken, async (req, res) => {
-            const tokenEmail = req.tokenUser.email;
-            const query = { email: tokenEmail };
-            const user = await usersCollection.findOne(query);
-            if (user?.status !== 'admin') {
-                return res.status(403).send('You are not admin.');
-            }
+        app.put("/admin/user/status", verifyToken, verifyAdmin, async (req, res) => {
             const filter = { email: req.body.email };
             console.log(req.body);
             const updatedStatus = {
@@ -162,29 +172,18 @@ async function run() {
                     status: req.body.status
                 }
             }
-            const result = await usersCollection.updateOne(filter,updatedStatus);
+            const result = await usersCollection.updateOne(filter, updatedStatus);
             res.send(result)
         })
 
-        app.delete("/admin/users/:email", verifyToken, async (req, res) => {
+        app.delete("/admin/users/:email", verifyToken, verifyToken, async (req, res) => {
             const email = req.params.email;
-            const tokenEmail = req.tokenUser.email;
-            const query = { email: tokenEmail };
-            const user = await usersCollection.findOne(query);
-            if (user?.status !== 'admin') {
-                return res.status(403).send('You are not admin.');
-            }
             const result = await usersCollection.deleteOne({ email: email });
             res.send(result)
-
         })
 
-        app.get("/admin/users/:email", verifyToken, async (req, res) => {
+        app.get("/admin/users/:email", verifyToken, verifyAdmin, async (req, res) => {
             const email = req.params.email;
-            const tokenEmail = req.tokenUser.email;
-            if (email !== tokenEmail) {
-                return res.status(403).send('Unauthorized User.');
-            }
             const query = { email: email };
             const user = await usersCollection.findOne(query);
             if (user.status !== 'admin') {

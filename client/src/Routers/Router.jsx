@@ -22,6 +22,7 @@ import AddItem from "../Pages/Admin/AddItem";
 import ManageItems from "../Pages/Admin/ManageItems";
 import ManageBookings from "../Pages/Admin/ManageBookings";
 import AllUsers from "../Pages/Admin/AllUsers";
+import PrivateAdminRoute from "./PrivateAdminRoute";
 
 const router = createBrowserRouter([
     {
@@ -91,11 +92,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "/dashboard/admin/add-item",
-                element: <AddItem></AddItem>
+                element: <PrivateAdminRoute><AddItem></AddItem></PrivateAdminRoute>
             },
             {
                 path: "/dashboard/admin/manage-items",
-                element: <ManageItems></ManageItems>
+                element: <PrivateAdminRoute><ManageItems></ManageItems></PrivateAdminRoute>
             },
             {
                 path: "/dashboard/admin/manage-bookings",
