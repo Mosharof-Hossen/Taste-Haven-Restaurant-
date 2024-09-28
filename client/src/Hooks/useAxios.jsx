@@ -24,6 +24,11 @@ const useAxios = () => {
         )
     }, [])
 
+
+    // if (loading) {
+    //     return <div className='text-center mt-32'><span className='loading loading-bars loading-lg'></span></div>
+    // }
+
     return axiosInstance;
 };
 
