@@ -207,6 +207,11 @@ async function run() {
             res.send(result)
         })
 
+        app.post("/admin/item", verifyToken, verifyAdmin, async (req, res) => {
+            const item = req.body
+            const result = await menuCollection.insertOne(item);
+            res.send(result)
+        })
 
 
         // Send a ping to confirm a successful connection

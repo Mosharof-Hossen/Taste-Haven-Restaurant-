@@ -1,14 +1,37 @@
 import SectionTitle from "../../Components/SectionTitle/SectionTitle";
 import { TbToolsKitchen2 } from "react-icons/tb";
 import { useForm } from 'react-hook-form';
-import useAxios from "../../Hooks/useAxios";
+import axios from "axios";
+import useFetchPostItem from "../../API/useFetchPostItem";
 
 const AddItem = () => {
-    const axios = useAxios();
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    // const axios = useAxios();
+    const itemCreateMutation = useFetchPostItem();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const onSubmit = async (data) => {
-        const res = await axios.post(`https://api.imgbb.com/1/upload/${data.image[0]}`)
-        console.log(res.data);
+        console.log(data);
+        const imageFile = { image: data.image[0] }
+        const res = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API}`,
+            imageFile, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+        )
+        console.log(res.data.data.display_url);
+        console.log(res.data.status);
+        if (res.data.status == 200) {
+            itemCreateMutation.mutate({
+                name: data.recipe,
+                recipe: data.recipeDetails,
+                image: res.data.data.display_url,
+                category: data.category,
+                price: parseFloat(data.price)
+
+            })
+            reset()
+        }
+
     };
     console.log(errors);
 
