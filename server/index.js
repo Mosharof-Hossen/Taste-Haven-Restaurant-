@@ -124,7 +124,6 @@ async function run() {
 
         app.delete("/carts/:id", async (req, res) => {
             const id = req.params.id;
-            console.log(id);
             const result = await cartItemsCollection.deleteOne({ _id: new ObjectId(id) });
             res.send(result)
         })
@@ -140,7 +139,6 @@ async function run() {
         const verifyAdmin = async (req, res, next) => {
             const email = req.tokenUser.email;
             const query = { email: email };
-            console.log(query);
             const user = await usersCollection.findOne(query);
             const isAdmin = user?.status === "admin";
             if (!isAdmin) {
@@ -166,7 +164,7 @@ async function run() {
 
         app.put("/admin/user/status", verifyToken, verifyAdmin, async (req, res) => {
             const filter = { email: req.body.email };
-            console.log(req.body);
+            
             const updatedStatus = {
                 $set: {
                     status: req.body.status
@@ -223,6 +221,34 @@ async function run() {
             const item = req.body
             const result = await menuCollection.insertOne(item);
             res.send(result)
+        })
+
+        app.patch("/admin/manage-item", verifyToken, verifyAdmin, async (req, res) => {
+            const data = req.body;
+            const query = { _id: new ObjectId(data.id) };
+            if (data.image) {
+                let updatedDocument = {
+                    $set: {
+                        name: data.name,
+                        recipe: data.recipe,
+                        image: data.image,
+                        category: data.category,
+                        price: data.price
+                    }
+                }
+                const result = await menuCollection.updateOne(query, updatedDocument);
+                return res.send(result)
+            }
+            let updatedDocument = {
+                $set: {
+                    name: data.name,
+                    recipe: data.recipe,
+                    category: data.category,
+                    price: data.price
+                }
+            }
+            const result = await menuCollection.updateOne(query, updatedDocument);
+            return res.send(result)
         })
 
 

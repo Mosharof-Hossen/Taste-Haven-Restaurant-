@@ -3,10 +3,18 @@ import useFetchAllItemsManage from "../../API/useFetchAllItemsManage";
 import SectionTitle from "../../Components/SectionTitle/SectionTitle";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import useFetchDeleteItemAdmin from "../../API/useFetchDeleteItemAdmin";
+import { useForm } from "react-hook-form";
+import { TbToolsKitchen2 } from "react-icons/tb";
+import { useState } from "react";
+import axios from "axios";
+import useFetchItemUpdateAdmin from "../../API/useFetchItemUpdateAdmin";
 
 const ManageItems = () => {
+    const itemUpdateMutation = useFetchItemUpdateAdmin()
+    const [selectedItem, setSelectedItem] = useState([])
     const { data, isLoading } = useFetchAllItemsManage();
     const itemDeleteMutation = useFetchDeleteItemAdmin();
+    const { register, handleSubmit, formState: { errors }, } = useForm();
     if (isLoading) {
         return <div className='text-center mt-32'><span className='loading loading-bars loading-lg'></span></div>
     }
@@ -25,9 +33,46 @@ const ManageItems = () => {
             }
         });
     }
-    const handleEditItem = () => {
+    const handleEditItem = (id) => {
+        document.getElementById('my_modal_5').showModal()
+        const filteredItem = data.find(item => item._id == id);
+        setSelectedItem(filteredItem);
 
     }
+    const onSubmit = async (data) => {
+        console.log(data);
+        const imageFile = { image: data.image[0] }
+        if (data.image.length > 0) {
+            const res = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API}`,
+                imageFile, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            if (res.data.status == 200) {
+                itemUpdateMutation.mutate({
+                    id: selectedItem._id,
+                    name: data.name,
+                    recipe: data.recipeDetails,
+                    image: res.data.data.display_url,
+                    category: data.category,
+                    price: parseFloat(data.price)
+
+                })
+            }
+        }
+        else {
+            itemUpdateMutation.mutate({
+                id: selectedItem._id,
+                name: data.name,
+                recipe: data.recipeDetails,
+                category: data.category,
+                price: parseFloat(data.price)
+            })
+        }
+
+
+    };
     return (
         <div>
             <SectionTitle heading={"manage all items"} subHeading={"Hurry Up"}></SectionTitle>
@@ -77,6 +122,81 @@ const ManageItems = () => {
                     </div>
                 </div>
             </div>
+            {/* ********** Modal************** */}
+            <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+                <div className="modal-box">
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                        <label className="form-control w-full ">
+                            <div className="label">
+                                <span className="label-text font-semibold">Recipe Name*</span>
+                            </div>
+                            <input type="text" defaultValue={selectedItem.name} placeholder="Recipe Name" className="input input-bordered w-full " {...register("name", { required: true })} />
+                            {
+                                errors?.name?.type == "required" && <p className="text-sm text-red-500 p-1">Recipe Name is Required</p>
+                            }
+                        </label>
+                        <div className="flex gap-5">
+                            <div className="flex-1">
+                                <label className="form-control w-full ">
+                                    <div className="label">
+                                        <span className="label-text font-semibold">Category*</span>
+                                    </div>
+                                    <select defaultValue={selectedItem.category} className="select select-bordered w-full "{...register("category", { required: true })}>
+                                        <option value={"salad"}>Salad</option>
+                                        <option value={"pizza"}>Pizza</option>
+                                        <option value={"soup"}>Soup</option>
+                                        <option value={"dessert"}>Dessert</option>
+                                        <option value={"drinks"}>Drinks</option>
+
+                                    </select>
+                                    {
+                                        errors?.category?.type == "required" && <p className="text-sm text-red-500 p-1">Category is Required</p>
+                                    }
+                                </label>
+                            </div>
+                            <div className="flex-1">
+                                <label className="form-control w-full ">
+                                    <div className="label">
+                                        <span className="label-text font-semibold">Price*</span>
+                                    </div>
+                                    <input type="text" defaultValue={selectedItem.price} placeholder="Price" className="input input-bordered w-full " {...register("price", { required: true })} />
+                                    {
+                                        errors?.price?.type == "required" && <p className="text-sm text-red-500 p-1">Price is Required</p>
+                                    }
+                                </label>
+                            </div>
+                        </div>
+                        <label className="form-control w-full ">
+                            <div className="label">
+                                <span className="label-text font-semibold">Recipe*</span>
+                            </div>
+                            <textarea
+                                defaultValue={selectedItem.recipe}
+                                placeholder="Recipe Details" {...register("recipeDetails", { required: true })}
+                                className="textarea textarea-bordered textarea-lg w-full text-justify"></textarea>
+                            {
+                                errors?.recipeDetails?.type == "required" && <p className="text-sm text-red-500 p-1">Recipe Details is Required</p>
+                            }
+                        </label>
+                        <input type="file" className="file-input w-full max-w-xs" {...register("image")} />
+
+                        <br />
+                        <button type="submit" className="bg-[#D99904] mx-auto text-xl px-3 py-2 rounded text-white flex items-center" >Add Item <TbToolsKitchen2 /></button>
+                    </form>
+                    <div className="modal-action">
+                        <form method="dialog">
+                            {/* if there is a button in form, it will close the modal */}
+                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                        </form>
+                        <form method="dialog">
+                            {/* if there is a button in form, it will close the modal */}
+                            <button className="btn">Close</button>
+                        </form>
+                    </div>
+                </div>
+            </dialog>
+
+
         </div>
     );
 };
