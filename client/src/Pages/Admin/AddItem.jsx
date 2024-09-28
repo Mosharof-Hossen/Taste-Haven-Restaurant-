@@ -9,7 +9,6 @@ const AddItem = () => {
     const itemCreateMutation = useFetchPostItem();
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const onSubmit = async (data) => {
-        console.log(data);
         const imageFile = { image: data.image[0] }
         const res = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API}`,
             imageFile, {
@@ -18,8 +17,6 @@ const AddItem = () => {
             }
         }
         )
-        console.log(res.data.data.display_url);
-        console.log(res.data.status);
         if (res.data.status == 200) {
             itemCreateMutation.mutate({
                 name: data.recipe,
@@ -33,7 +30,6 @@ const AddItem = () => {
         }
 
     };
-    console.log(errors);
 
     return (
         <div>

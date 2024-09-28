@@ -27,7 +27,6 @@ const AllUsers = () => {
             }
         });
     }
-    console.log(data);
     const handleUpdateUserStatus = (email) => {
         Swal.fire({
             title: "Type your wish: 'admin' or 'user'",

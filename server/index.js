@@ -193,6 +193,18 @@ async function run() {
             res.send(result)
         })
 
+        app.get("/admin/manage-item", async (req, res) => {
+            const result = await menuCollection.find().toArray();
+            res.send(result)
+        })
+
+        app.delete("/admin/manage-item/:id", verifyToken, verifyAdmin, async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await menuCollection.deleteOne(query);
+            res.send(result)
+        })
+
         app.post("/users", async (req, res) => {
             const user = req.body;
             const filter = { email: user.email };
@@ -212,6 +224,8 @@ async function run() {
             const result = await menuCollection.insertOne(item);
             res.send(result)
         })
+
+
 
 
         // Send a ping to confirm a successful connection
