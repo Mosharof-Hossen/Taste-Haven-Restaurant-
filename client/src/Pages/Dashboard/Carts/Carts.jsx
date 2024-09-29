@@ -3,6 +3,7 @@ import useFetchGetCarts from "../../../API/useFetchGetCarts";
 import SectionTitle from "../../../Components/SectionTitle/SectionTitle";
 import Swal from "sweetalert2";
 import useFetchDeleteItemFromCart from "../../../API/useFetchDeleteItemFromCart";
+import { Link } from "react-router-dom";
 
 const Carts = () => {
     const { data, isLoading } = useFetchGetCarts();
@@ -33,8 +34,9 @@ const Carts = () => {
             <SectionTitle heading={"wanna add More?"} subHeading={"MY Cart"}></SectionTitle>
             <div className="lg:w-11/12 bg-white lg:mx-auto p-5 rounded m-5 lg:m-0">
                 <div className="flex justify-between ">
-                    <h3 className="text-2xl font-bold font-cinzel-c">Total Orders:{data.length}</h3>
-                    <h3 className="text-2xl font-bold font-cinzel-c">Total Price: ${totalPrice}</h3>
+                    <h3 className="text-xl font-bold font-cinzel-c">Total Orders:{data.length}</h3>
+                    <h3 className="text-xl font-bold font-cinzel-c">Total Price: ${totalPrice}</h3>
+                    <Link to={"/dashboard/reservation"}><button className="bg-[#D1A054] text-white px-3 py-2 rounded">Pay</button></Link>
                 </div>
                 <div className="mt-5">
                     <div className="overflow-x-auto">

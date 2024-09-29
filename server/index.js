@@ -4,7 +4,7 @@ require("dotenv").config()
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-
+const stripe = require("stripe")(process.env.STRIPE_SK);
 
 const port = process.env.PORT || 3000;
 
@@ -66,6 +66,7 @@ async function run() {
         const reviewsCollection = client.db("tasteHavenDb").collection('reviews')
         const cartItemsCollection = client.db("tasteHavenDb").collection('cartItems')
         const usersCollection = client.db("tasteHavenDb").collection('users')
+        const paymentsCollection = client.db("tasteHavenDb").collection('payments')
 
         // JWT
         app.post("/jwt", async (req, res) => {
@@ -164,7 +165,7 @@ async function run() {
 
         app.put("/admin/user/status", verifyToken, verifyAdmin, async (req, res) => {
             const filter = { email: req.body.email };
-            
+
             const updatedStatus = {
                 $set: {
                     status: req.body.status
@@ -252,7 +253,38 @@ async function run() {
         })
 
 
+        // ***************** Payment Section *************
 
+        app.get("/payments/:email", verifyToken, async (req, res) => {
+            const query = { email: req.params.email };
+            const result = await paymentsCollection.find(query).toArray();
+            res.send(result);
+        })
+
+        app.post("/create-payment-intent", verifyToken, async (req, res) => {
+            const { price } = req.body;
+            const amount = parseInt(price * 100);
+
+            const paymentIntent = await stripe.paymentIntents.create({
+                amount: amount,
+                currency: "usd",
+                payment_method_types: ["card"],
+            })
+
+            res.send({ clientSecret: paymentIntent.client_secret, })
+        })
+
+        app.post("/payment", async (req, res) => {
+            const payment = req.body;
+            const paymentResult = await paymentsCollection.insertOne(payment);
+            const query = {
+                _id: {
+                    $in: payment.dbIds.map(id => new ObjectId(id))
+                }
+            }
+            const result = await cartItemsCollection.deleteMany(query);
+            res.send(result)
+        })
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
