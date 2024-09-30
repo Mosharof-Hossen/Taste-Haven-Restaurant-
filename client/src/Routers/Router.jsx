@@ -23,6 +23,7 @@ import ManageItems from "../Pages/Admin/ManageItems";
 import ManageBookings from "../Pages/Admin/ManageBookings";
 import AllUsers from "../Pages/Admin/AllUsers";
 import PrivateAdminRoute from "./PrivateAdminRoute";
+import BookATable from "../Pages/Dashboard/BookATable";
 
 const router = createBrowserRouter([
     {
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
             },
             {
                 path: "/dashboard/reservation",
+                element: <BookATable></BookATable>
+            },
+            {
+                path: "/dashboard/pay",
                 element: <Reservation></Reservation>
             },
             {

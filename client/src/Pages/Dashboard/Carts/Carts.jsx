@@ -36,7 +36,7 @@ const Carts = () => {
                 <div className="flex justify-between ">
                     <h3 className="text-xl font-bold font-cinzel-c">Total Orders:{data.length}</h3>
                     <h3 className="text-xl font-bold font-cinzel-c">Total Price: ${totalPrice}</h3>
-                    <Link to={"/dashboard/reservation"}><button className="bg-[#D1A054] text-white px-3 py-2 rounded">Pay</button></Link>
+                    <Link to={"/dashboard/pay"}><button className="bg-[#D1A054] text-white px-3 py-2 rounded">Pay</button></Link>
                 </div>
                 <div className="mt-5">
                     <div className="overflow-x-auto">

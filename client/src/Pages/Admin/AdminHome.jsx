@@ -47,7 +47,6 @@ const AdminHome = () => {
     if (isLoading) {
         return <div className='text-center mt-32'><span className='loading loading-bars loading-lg'></span></div>
     }
-    console.log(stats);
 
     const data = stats.orderStats.map(item => {
         return { name: item._id, value: item.quantity }
