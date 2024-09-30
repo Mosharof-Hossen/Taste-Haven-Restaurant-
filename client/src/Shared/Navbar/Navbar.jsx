@@ -30,7 +30,11 @@ const Navbar = () => {
     }
     const links = <>
         <NavLink className={"md:ml-2 p-1 font-bold text-white"} to={"/"} ><li>HOME</li></NavLink>
-        <NavLink className={"md:ml-2 p-1 font-bold text-white"} to={adminInfo?.admin ? "/dashboard/admin" : "/dashboard"} ><li>DASHBOARD</li></NavLink>
+
+        {
+            user && <NavLink className={"md:ml-2 p-1 font-bold text-white"} to={adminInfo?.admin ? "/dashboard/admin" : "/dashboard"} ><li>DASHBOARD</li></NavLink>
+        }
+
         <NavLink className={"md:ml-2 p-1 font-bold text-white"} to={"/our-menu"} ><li>OUR MENU</li></NavLink>
         <NavLink className={"md:ml-2 p-1 font-bold text-white"} to={"/our-shop"} ><li>OUR SHOP</li></NavLink>
         <NavLink className={"md:ml-2 p-1 font-bold text-white"} to={"/contact-us"} ><li>CONTACT US</li></NavLink>

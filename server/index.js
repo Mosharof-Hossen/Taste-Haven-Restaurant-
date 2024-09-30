@@ -286,6 +286,59 @@ async function run() {
             res.send(result)
         })
 
+
+        // Admin stats
+        app.get("/admin-stats", verifyToken, verifyAdmin, async (req, res) => {
+            const users = await usersCollection.estimatedDocumentCount();
+            const menuItem = await menuCollection.estimatedDocumentCount();
+            const orders = await paymentsCollection.estimatedDocumentCount();
+            const result = await paymentsCollection.aggregate([
+                {
+                    $group: {
+                        _id: null,
+                        totalRevenue: { $sum: "$price" }
+                    }
+
+                }
+            ]).toArray()
+
+            const orderStats = await paymentsCollection.aggregate([
+                {
+                    $unwind: "$itemIds"
+                },
+                {
+                    $lookup: {
+                        from: "menu",
+                        let: { itemId: { $toObjectId: "$itemIds" } },
+                        pipeline: [
+                            { $match: { $expr: { $eq: ["$_id", "$$itemId"] } } }  // Match itemId to _id in menu
+                        ],
+                        as: "menuDetails"
+                    }
+                },
+                {
+                    $unwind: "$menuDetails"
+                },
+                {
+                    $group: {
+                        _id: "$menuDetails.category",
+                        quantity: { $sum: 1 }
+                    }
+                }
+
+
+            ]).toArray();
+
+            const revenue = result.length > 0 ? result[0].totalRevenue : 0
+            res.send({
+                users,
+                menuItem,
+                orders,
+                revenue,
+                orderStats
+            })
+        })
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");

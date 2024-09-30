@@ -2,19 +2,20 @@ import { useQuery } from "@tanstack/react-query";
 import useAuthContext from "../../../Hooks/useAuthContext";
 import useAxios from "../../../Hooks/useAxios";
 import SectionTitle from "../../../Components/SectionTitle/SectionTitle";
-import { Link } from "react-router-dom";
 
 const PaymentHistory = () => {
     const { user } = useAuthContext();
     const axios = useAxios()
-    const { data } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ['payment', user.email],
         queryFn: async () => {
             const res = await axios.get(`/payments/${user.email}`);
             return res.data;
         }
     })
-    console.log(data);
+    if (isLoading) {
+        return <div className='text-center mt-32'><span className='loading loading-bars loading-lg'></span></div>
+    }
     return (
         <div className="">
             <SectionTitle heading={"payment history"} subHeading={"Al A Glance !"}></SectionTitle>
@@ -32,18 +33,20 @@ const PaymentHistory = () => {
                                     <th>EMAIL</th>
                                     <th>TOTAL PRICE</th>
                                     <th>PAYMENT DATE </th>
+                                    <th>TRANSACTION ID</th>
                                     <th className="rounded-tr-2xl">STATUS</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {/* row 1 */}
                                 {
-                                    data.map((item, i) => <tr key={item._id}>
+                                    data?.map((item, i) => <tr key={item._id}>
                                         <th>{i + 1}</th>
 
                                         <td>{item.email}</td>
                                         <td>${item.price}</td>
                                         <td>{item.date.split("T")[0]}</td>
+                                        <td>{item.transactionId}</td>
                                         <td>{item.status}</td>
 
                                     </tr>)
