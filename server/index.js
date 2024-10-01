@@ -67,6 +67,7 @@ async function run() {
         const cartItemsCollection = client.db("tasteHavenDb").collection('cartItems')
         const usersCollection = client.db("tasteHavenDb").collection('users')
         const paymentsCollection = client.db("tasteHavenDb").collection('payments')
+        const bookingsCollection = client.db("tasteHavenDb").collection('bookings')
 
         // JWT
         app.post("/jwt", async (req, res) => {
@@ -252,6 +253,11 @@ async function run() {
             return res.send(result)
         })
 
+        app.post("/clint-bookings", verifyToken, async (req, res) => {
+            const data = req.body;
+            const result = await bookingsCollection.insertOne(data);
+            res.send(result)
+        })
 
         // ***************** Payment Section *************
 
