@@ -280,6 +280,12 @@ async function run() {
             const result = await bookingsCollection.updateOne({ _id: new ObjectId(id) }, updatedData);
             res.send(result)
         })
+
+        app.post("/add-review", verifyToken, async (req, res) => {
+            const data = req.body;
+            const result = await reviewsCollection.insertOne(data);
+            res.send(result)
+        })
         // ***************** Payment Section *************
 
         app.get("/payments/:email", verifyToken, async (req, res) => {

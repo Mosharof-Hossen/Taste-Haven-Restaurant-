@@ -64,7 +64,7 @@ const BookATable = () => {
                         </div>
                     </div>
                     <div className="form-control mt-6">
-                        <button className="btn bg-[#D1A054] text-white w-full md:w-1/3 mx-auto">Boo A Table</button>
+                        <button className="btn bg-[#D1A054] text-white w-full md:w-1/3 mx-auto">Book A Table</button>
                     </div>
                 </form>
             </div>
