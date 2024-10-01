@@ -258,8 +258,15 @@ async function run() {
             const result = await bookingsCollection.insertOne(data);
             res.send(result)
         })
-        app.get("/my-bookings", async (req, res) => {
+        app.get("/my-bookings", verifyToken, async (req, res) => {
             const result = await bookingsCollection.find().toArray();
+            res.send(result)
+        })
+
+        app.delete("/my-bookings/:id", verifyToken, async (req, res) => {
+            const id = req.params.id;
+            const result = await bookingsCollection.deleteOne({ _id: new ObjectId(id) });
+
             res.send(result)
         })
         // ***************** Payment Section *************

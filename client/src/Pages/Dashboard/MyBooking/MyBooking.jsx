@@ -1,24 +1,30 @@
-import { useQuery } from "@tanstack/react-query";
 import SectionTitle from "../../../Components/SectionTitle/SectionTitle";
-import useAxios from "../../../Hooks/useAxios";
 import { FaTrash } from "react-icons/fa";
+import useFetchDeleteBookings from "../../../API/useFetchDeleteBookings";
+import Swal from "sweetalert2";
+import useFetchGetMyBookigs from "../../../API/useFetchGetMyBookigs";
 
 
 const MyBooking = () => {
-    const axios = useAxios();
-    const { data, isLoading } = useQuery({
-        queryKey: ["my-bookings"],
-        queryFn: async () => {
-            const res = await axios.get('/my-bookings');
-            return res.data;
-        }
-    })
+    const bookingsDeleteMutation = useFetchDeleteBookings();
+    const { data, isLoading } = useFetchGetMyBookigs();
     if (isLoading) {
         return <div className='text-center mt-32'><span className='loading loading-bars loading-lg'></span></div>
     }
-    console.log(data);
-    const handleDeleteBookings = () => {
-
+    const handleDeleteBookings = (id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Are You Want to Delete This Bookings",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                bookingsDeleteMutation.mutate(id);
+            }
+        });
     }
     return (
         <div>
@@ -55,7 +61,7 @@ const MyBooking = () => {
                                         <td>{item.date}</td>
                                         <td>{item.phone}</td>
                                         <td>{item.time}</td>
-                                        <td className={item.status == "pending"?'text-orange-500':"text-green-600"}>{item.status}</td>
+                                        <td className={item.status == "pending" ? 'text-orange-500' : "text-green-600"}>{item.status}</td>
                                         <td>
                                             <button onClick={() => handleDeleteBookings(item._id)} className="p-2 bg-red-700 rounded text-white text-xl"><FaTrash></FaTrash></button>
                                         </td>
