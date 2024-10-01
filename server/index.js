@@ -258,7 +258,10 @@ async function run() {
             const result = await bookingsCollection.insertOne(data);
             res.send(result)
         })
-
+        app.get("/my-bookings", async (req, res) => {
+            const result = await bookingsCollection.find().toArray();
+            res.send(result)
+        })
         // ***************** Payment Section *************
 
         app.get("/payments/:email", verifyToken, async (req, res) => {
