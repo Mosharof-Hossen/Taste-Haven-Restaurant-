@@ -269,6 +269,17 @@ async function run() {
 
             res.send(result)
         })
+
+        app.patch("/booking-manage/:id", verifyToken, verifyAdmin, async (req, res) => {
+            const id = req.params.id
+            const updatedData = {
+                $set: {
+                    status: "Done"
+                }
+            }
+            const result = await bookingsCollection.updateOne({ _id: new ObjectId(id) }, updatedData);
+            res.send(result)
+        })
         // ***************** Payment Section *************
 
         app.get("/payments/:email", verifyToken, async (req, res) => {
