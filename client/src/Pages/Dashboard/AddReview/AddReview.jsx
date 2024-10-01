@@ -2,15 +2,18 @@ import { FaStar } from "react-icons/fa";
 import SectionTitle from "../../../Components/SectionTitle/SectionTitle";
 import { useForm } from "react-hook-form";
 import useFetchAddReview from "../../../API/useFetchAddReview";
+import useAuthContext from "../../../Hooks/useAuthContext";
 
 const AddReview = () => {
-    const { register, handleSubmit,  } = useForm();
+    const { user } = useAuthContext()
+    const { register, handleSubmit, } = useForm();
     const addReviewMutation = useFetchAddReview();
     const onSubmit = data => {
         addReviewMutation.mutate({
             name: data.name,
             details: data.details,
-            rating: parseInt(data.rating)
+            rating: parseInt(data.rating),
+            email: user.email,
         })
     };
     return (

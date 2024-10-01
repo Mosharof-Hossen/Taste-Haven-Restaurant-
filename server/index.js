@@ -286,6 +286,19 @@ async function run() {
             const result = await reviewsCollection.insertOne(data);
             res.send(result)
         })
+
+        app.get("/user-profile/:email", verifyToken, async (req, res) => {
+            const email = req.params.email
+            const reviews = await reviewsCollection.countDocuments({email:email});
+            const bookings = await bookingsCollection.countDocuments({email:email});
+            const payment = await paymentsCollection.countDocuments({email:email});
+            res.send({
+                reviews,
+                bookings,
+                payment
+            })
+        })
+
         // ***************** Payment Section *************
 
         app.get("/payments/:email", verifyToken, async (req, res) => {

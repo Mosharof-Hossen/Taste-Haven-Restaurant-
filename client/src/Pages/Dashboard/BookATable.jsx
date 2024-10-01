@@ -2,14 +2,16 @@ import SectionTitle from "../../Components/SectionTitle/SectionTitle";
 import { useForm } from 'react-hook-form';
 import { FaLocationArrow, FaPhoneAlt } from "react-icons/fa";
 import useFetchAddBookings from "../../API/useFetchAddBookings";
+import useAuthContext from "../../Hooks/useAuthContext";
 
 const BookATable = () => {
+    const { user } = useAuthContext()
     const { register, handleSubmit, formState: { errors } } = useForm();
     const addBookingsMutation = useFetchAddBookings();
     const onSubmit = data => {
         addBookingsMutation.mutate({
             date: data.date,
-            email: data.email,
+            email: user?.email,
             guest: data.guest,
             name: data.name,
             phone: data.phone,
@@ -60,7 +62,7 @@ const BookATable = () => {
                             <label className="label">
                                 <span className="label-text font-bold">Email*</span>
                             </label>
-                            <input type="email" {...register("email")} placeholder="Email" className="input input-bordered" required />
+                            <input defaultValue={user?.email} type="email" {...register("email")} placeholder="Email" className="input input-bordered" required />
                         </div>
                     </div>
                     <div className="form-control mt-6">
