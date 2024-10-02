@@ -45,3 +45,23 @@ Email: test@test.com pass: 123456
 7.React Icons.
 
 8.Font Awesome icon.
+
+## Home Page
+![home](https://github.com/user-attachments/assets/92e97b16-d044-4478-b2ae-32a0211351e1)
+
+## Our Menu page
+![our menu](https://github.com/user-attachments/assets/1dd15187-cc3f-4528-a48c-c9cd9845c12f)
+
+## Our Shop Page
+![our shop](https://github.com/user-attachments/assets/f6bb83d8-e908-48e5-8da0-f9805e7133e3)
+
+## Admin dashboard
+![admin dashboad](https://github.com/user-attachments/assets/52d244ac-12a8-47f7-b0dd-3ea273b47cc3)
+
+## User Dashboard
+![user deshboard](https://github.com/user-attachments/assets/5a552685-b357-40d1-81ef-a9b1a58d63d9)
+
+## Login Page
+![login form](https://github.com/user-attachments/assets/8f0da367-793b-42e2-a501-2b9ef2d9103a)
+
+
