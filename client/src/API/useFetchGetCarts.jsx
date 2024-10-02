@@ -4,7 +4,8 @@ import useAxios from "../Hooks/useAxios";
 
 
 const useFetchGetCarts = () => {
-    const { user } = useAuthContext();
+    const { user,cartLoading } = useAuthContext();
+
     const axios = useAxios()
     const getCartFunction = async (email = "") => {
         const res = await axios.get(`/carts/${email}`, { withCredentials: true })
@@ -13,7 +14,7 @@ const useFetchGetCarts = () => {
     const { data, refetch: cartItemRefetch, isLoading } = useQuery({
         queryKey: ["IndividualCartItem", user?.email],
         queryFn: () => getCartFunction(user?.email),
-        enabled: !!user?.email,
+        enabled: !!user?.email && cartLoading,
     })
 
     return { data, cartItemRefetch, isLoading };

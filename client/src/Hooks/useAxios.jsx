@@ -4,7 +4,7 @@ import { signOut } from 'firebase/auth';
 import auth from '../Firebase/Firebase';
 
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: "https://taste-haven-seven.vercel.app",
     withCredentials: true
 })
 

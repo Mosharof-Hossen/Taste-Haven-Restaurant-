@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { createContext, useEffect, useState } from 'react';
 import auth from '../Firebase/Firebase';
 import useAxios from '../Hooks/useAxios';
+import { useQuery } from '@tanstack/react-query';
 
 export const AuthContext = createContext(null);
 
@@ -11,7 +12,10 @@ const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const googleProvider = new GoogleAuthProvider();
     const githubProvider = new GithubAuthProvider();
-  
+    const [admin, setAdmin] = useState({})
+    const [cartData, setCartData] = useState([]);
+    const [cartLoading ,setCartLoading] = useState(false)
+
     const axios = useAxios();
     // CreateUser
     const createUserByEmailPass = (email, password) => {
@@ -46,7 +50,15 @@ const AuthProvider = ({ children }) => {
             setLoading(false)
             const jwt = { email: currentUser?.email }
             if (currentUser) {
+                console.log(currentUser);
                 axios.post("/jwt", jwt, { withCredentials: true })
+                    .then(async () => {
+                        const res = await axios.get(`/user/admin/${currentUser.email}`);
+                        setAdmin(res.data)
+                        setCartLoading(true)
+                        const cartData = await axios.get(`/carts/${currentUser.email}`);
+                        setCartData(cartData.data)
+                    })
             }
             else {
                 axios.post("/logout", jwt, { withCredentials: true })
@@ -64,7 +76,10 @@ const AuthProvider = ({ children }) => {
         loginByEmailPass,
         loginByGoogle,
         loading,
-        loginByGithub
+        loginByGithub,
+        admin,
+        cartData,
+        cartLoading
     }
     return (
         <AuthContext.Provider value={authInfo}>

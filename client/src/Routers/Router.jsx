@@ -24,11 +24,13 @@ import ManageBookings from "../Pages/Admin/ManageBookings";
 import AllUsers from "../Pages/Admin/AllUsers";
 import PrivateAdminRoute from "./PrivateAdminRoute";
 import BookATable from "../Pages/Dashboard/BookATable";
+import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <Main></Main>,
+        errorElement:<ErrorPage></ErrorPage>,
         children: [
             {
                 path: "/",

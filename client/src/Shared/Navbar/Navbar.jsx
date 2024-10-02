@@ -4,18 +4,15 @@ import useAuthContext from "../../Hooks/useAuthContext";
 import Swal from "sweetalert2";
 import { FaCartPlus } from "react-icons/fa";
 import useFetchGetCarts from "../../API/useFetchGetCarts";
-import useFetchGetAdmin from "../../API/useFetchGetAdmin";
 
 
 const Navbar = () => {
-    const { data: adminInfo, isLoading } = useFetchGetAdmin();
-    const { user, logout } = useAuthContext();
+    const { user, logout, admin: adminInfo , cartData } = useAuthContext();
     const { data } = useFetchGetCarts();
 
-    if (isLoading) {
-        return <div className='text-center mt-32'><span className='loading loading-bars loading-lg'></span></div>
-    }
-
+    // if (isLoading) {
+    //     return <div className='text-center mt-32'><span className='loading loading-bars loading-lg'></span></div>
+    // }
     const handleLogout = () => {
         logout()
             .then(() => {

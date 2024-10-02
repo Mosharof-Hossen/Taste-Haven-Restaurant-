@@ -16,7 +16,8 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(cors({
     origin: [
-        "http://localhost:5173"
+        "http://localhost:5173",
+        'https://taste-haven-app.web.app'
     ],
     credentials: true
 }));
@@ -41,9 +42,9 @@ const verifyToken = (req, res, next) => {
 
 
 const cookieOptions = {
-    // httpOnly: true,
-    // sameSite: "None",
-    // secure: false,
+    httpOnly: true,
+    sameSite: "None",
+    secure: true,
 };
 
 
@@ -61,7 +62,8 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
+
         const menuCollection = client.db("tasteHavenDb").collection("menu");
         const reviewsCollection = client.db("tasteHavenDb").collection('reviews')
         const cartItemsCollection = client.db("tasteHavenDb").collection('cartItems')
@@ -117,6 +119,7 @@ async function run() {
         app.get("/carts/:email", verifyToken, async (req, res) => {
             const email = req.params.email;
             const tokenEmail = req.tokenUser.email;
+            
             if (!(tokenEmail == email)) {
                 return res.status(403).send('Unauthorized User.');
             }
@@ -386,8 +389,8 @@ async function run() {
         })
 
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+        // await client.db("admin").command({ ping: 1 });
+        // console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
         // await client.close();
